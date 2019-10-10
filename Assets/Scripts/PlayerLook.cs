@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerLook : MonoBehaviour
 {
@@ -19,6 +20,13 @@ public class PlayerLook : MonoBehaviour
     void Update()
     {
         CamRotate();
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            //private Scene thisScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        // Checkpoints?
     }
 
     private void CamRotate() {

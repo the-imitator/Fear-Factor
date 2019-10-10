@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float jumpForce;
     public ForceMode forceType;
     bool isFalling;
+    public bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,11 +18,37 @@ public class PlayerMove : MonoBehaviour
     }
 
     private void Update() {
+
+        //RayCast
+        Ray myRay = new Ray(transform.position, Vector3.down);
+        float myRayDist = 0.7f;
+        Debug.DrawRay(myRay.origin, myRay.direction * myRayDist, Color.yellow);
+
+        //if (Physics.Raycast(myRay, myRayDist)) {
+        //    isFalling = false;
+        //} else {
+        //    isFalling = true;
+        //}
+
+        if (Physics.SphereCast(myRay, 0.01f, myRayDist)) {
+            isFalling = false;
+        } else {
+            isFalling = true;
+        }
+
         //jumping
         if (Input.GetButton("Jump") && !isFalling) {
-            isFalling = true;
             Jump(jumpForce, forceType);
         }
+
+        //Debug.Log(isFalling);
+        // okay fix up this mess here smh
+
+
+        if (transform.position.y < 15) {
+            isDead = true;
+        }
+
     }
 
     // Update is called once per frame
@@ -36,11 +63,38 @@ public class PlayerMove : MonoBehaviour
         rb.AddForce(transform.up * force, type);
     }
 
-    private void OnCollisionStay(Collision collision) {
+/*    private void OnCollisionStay(Collision collision) {
         if (isFalling) {
             isFalling = false;
         }
-    }
+        // CharController - has isGrounded and also can check if only the bottom side is colliding rather
+        // than the sides
+        // Can also check contact point and if the y of contact is lower than the object, then it is
+        // near the bottom
+    }*/
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Acacia Developer
