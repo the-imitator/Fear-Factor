@@ -45,7 +45,7 @@ public class PlayerMove : MonoBehaviour
         // okay fix up this mess here smh
 
 
-        if (transform.position.y < 15) {
+        if (transform.position.y < 5) {
             isDead = true;
         }
 

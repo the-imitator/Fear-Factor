@@ -39,6 +39,7 @@ public class BlockDrop : MonoBehaviour
         }
     }
 
+    // process:
     // 1. player collides
     // 2. isCounting becomes true, timer -= Time.deltaTime
     // 3. player can leave block or stay, but timer continues.

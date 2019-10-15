@@ -6,33 +6,41 @@ public class PlayerDeath : MonoBehaviour
 {
     // USAGE: Put this on the player's camera???
     // FUNCTION: When the player dies, the camera moves to spin around the player slowly.
-    float counter;
+    float timer;
+    public float camOffset = 1f;
+    float rotationSpeed = 0.2f;
+
     public Transform player;
     public bool playerDead;
-    public float camOffset = 1.5f;
 
     void Start() {
-        //player = GetComponent<GameObject>();
         playerDead = transform.parent.GetComponent<PlayerMove>().isDead;
-        // find a way to store this and access player instead because it is not updated like this.
 
     }
 
     void Update() {
+        playerDead = transform.parent.GetComponent<PlayerMove>().isDead;
         if (playerDead) {
-            //transform.parent.GetComponent<PlayerLook>().enabled = false;
-            playerDead = transform.parent.GetComponent<PlayerMove>().isDead;
+            transform.parent.GetComponent<PlayerMove>().enabled = false;
 
             transform.LookAt(player);
 
             // rotate camera
-            counter += Time.deltaTime/5;
-            float x = player.position.x + camOffset + Mathf.Cos(counter);
-            float y = player.position.y + camOffset;
-            float z = player.position.z + camOffset + Mathf.Sin(counter);
+            timer += Time.deltaTime * rotationSpeed;
+            //float x = player.position.x + camOffset + Mathf.Cos(counter);
+            //float y = player.position.y + camOffset;
+            //float z = player.position.z + camOffset + Mathf.Sin(counter);
+            // this only rotates about a specific other position and not around the player....
+            // nvm i was just dumb and forgot to add the player.position to the new position.
+            float x = -Mathf.Cos(timer) * camOffset;
+            float y = camOffset;
+            float z = Mathf.Sin(timer) * camOffset;
+            transform.position = new Vector3(x, y, z) + player.position;
 
-            transform.position = new Vector3(x, y, z);
-        }    
+            transform.parent.eulerAngles = new Vector3(0, 0, 90);
+        } else {
+            transform.parent.GetComponent<PlayerMove>().enabled = true;
+        }
     }
 
 
