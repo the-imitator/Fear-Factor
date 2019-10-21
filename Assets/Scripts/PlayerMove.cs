@@ -7,60 +7,55 @@ public class PlayerMove : MonoBehaviour
     Rigidbody rb;
     [SerializeField] private float speed;
     [SerializeField] private float jumpForce;
-    public ForceMode forceType;
-    bool isFalling;
+    public float gravMult;
+    public float lowJumpMult;
+    bool onGround;
     public bool isDead = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Update() {
+    private void FixedUpdate() {
+
+        //Movement
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        rb.MovePosition(transform.position + transform.TransformDirection(horizontal, 0, vertical) * Time.deltaTime * speed);
 
         //RayCast
         Ray myRay = new Ray(transform.position, Vector3.down);
-        float myRayDist = 0.7f;
+        float myRayDist = 1.7f;
         Debug.DrawRay(myRay.origin, myRay.direction * myRayDist, Color.yellow);
 
-        //if (Physics.Raycast(myRay, myRayDist)) {
-        //    isFalling = false;
-        //} else {
-        //    isFalling = true;
-        //}
-
+        //SphereCast to check if onGround
         if (Physics.SphereCast(myRay, 0.01f, myRayDist)) {
-            isFalling = false;
+            onGround = true;
         } else {
-            isFalling = true;
+            onGround = false;
         }
 
-        //jumping
-        if (Input.GetButton("Jump") && !isFalling) {
-            Jump(jumpForce, forceType);
+        //Jumping
+        if (Input.GetButton("Jump") && onGround) {
+            Jump(jumpForce);
         }
 
-        //Debug.Log(isFalling);
-        // okay fix up this mess here smh
-
-
-        if (transform.position.y < 5) {
+        if (transform.position.y < 13) {
             isDead = true;
         }
 
     }
 
-    // Update is called once per frame
-    private void FixedUpdate()
-    {
-        float horizontal = Input.GetAxis("Horizontal"); 
-        float vertical = Input.GetAxis("Vertical");
-        rb.MovePosition(transform.position + transform.TransformDirection(horizontal, 0, vertical) * Time.deltaTime * speed);
-    }
-
-    private void Jump(float force, ForceMode type) {
-        rb.AddForce(transform.up * force, type);
+    private void Jump(float force) {
+        rb.AddForce(transform.up * force, ForceMode.Impulse);
+        // Better Jump by Board to Bits Games
+        /*if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space)) {
+            rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMult - 1) * Time.deltaTime;
+        } else */
+        if (rb.velocity.y < 0) {
+            rb.velocity += Vector3.up * Physics.gravity.y * (gravMult - 1) * Time.deltaTime;
+        }
     }
 
 /*    private void OnCollisionStay(Collision collision) {

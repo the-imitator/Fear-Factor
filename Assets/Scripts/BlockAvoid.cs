@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// USAGE: put this on platforms with NO SPRING JOINT that players should avoid. 
+// USAGE: put this on objects that players should avoid. 
 // FUNCTION: players die upon touching these.
 public class BlockAvoid : MonoBehaviour
 {
