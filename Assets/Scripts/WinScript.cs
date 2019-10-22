@@ -5,15 +5,17 @@ using UnityEngine.UI;
 
 public class WinScript : MonoBehaviour
 {
-    public MeshRenderer winText;
+    public GameObject winText;
+    public GameObject rText;
 
     void Start() {
-        winText = GetComponent<MeshRenderer>();
-        winText.GetComponent<MeshRenderer>().enabled = false;
+        winText.gameObject.SetActive(false);
+        rText.gameObject.SetActive(false);
     }
     void OnTriggerEnter (Collider other) {
-        if (other.tag == "Player") { 
-            winText.GetComponent<MeshRenderer>().enabled = true;
+        if (other.tag == "Player") {
+            winText.gameObject.SetActive(true);
+            rText.gameObject.SetActive(true);
         }
     }
 }

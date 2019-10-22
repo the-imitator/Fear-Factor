@@ -23,7 +23,6 @@ public class BlockDrop : MonoBehaviour
     }
 
     void Update() {
-        Debug.Log(timer);
         if (isCounting) {
             timer -= Time.deltaTime;
         }
